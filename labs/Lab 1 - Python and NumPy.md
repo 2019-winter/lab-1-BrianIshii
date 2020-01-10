@@ -14,7 +14,7 @@ jupyter:
 ---
 
 # Name(s)
-**PUT YOUR FULL NAME(S) HERE**
+**Brian Ishii**
 
 
 **Instructions:** This is an individual assignment, but you may discuss your code with your neighbors.
@@ -36,7 +36,7 @@ Please read and reference the following as your progress through this course.
 **In the space provided below, what are three things that still remain unclear or need further explanation?**
 
 
-**YOUR ANSWER HERE**
+**Is there package management with notebooks?**
 
 
 ## Exercises 1-7
@@ -46,46 +46,118 @@ For the following exercises please read the Python appendix in the Marsland text
 ## Exercise 1
 
 ```python
+# Make an array a of size 6 × 4 where every element is a 2.
+
 # YOUR SOLUTION HERE
-#a=1000
-print('this is my answer',a+1) 
+
+import numpy as np
+
+a =  np.ones((6,4), dtype=int) * 2
+a
 ```
 
 ## Exercise 2
 
 ```python
+# Make an array b of size 6 × 4 that has 3 on the leading diagonal and 1
+# everywhere else. (You can do this without loops.)
+#b[range(4),range(4)] = 3 works too
+
 # YOUR SOLUTION HERE
-a=2000
+b =  np.ones((6,4))
+np.fill_diagonal(b, 3)
+b
 ```
 
 ## Exercise 3
 
 ```python
+# Can you multiply these two matrices together? Why does a * b work, but
+# not dot(a,b)?
+
 # YOUR SOLUTION HERE
+print(a * b) # works
+
+try:
+    np.dot(a,b)
+except:
+    print("doesn't work")
+    
+# dot product doesn't work because it is matrix multiplication,
+# and it requires num_col_a == num_row_b
 ```
 
 ## Exercise 4
 
 ```python
+# Compute dot(a.transpose(),b) and dot(a,b.transpose()). Why are
+# the results different shapes?
+print(np.dot(a.transpose(),b))
+print(np.dot(a,b.transpose()))
 # YOUR SOLUTION HERE
+
+# dot(a.transpose(),b)
+# this is 4x6 * 6x4 => 4x4 matrix
+
+# dot(a.transpose(),b)
+# this is 6x4 * 4x6 => 6x6 matrix
 ```
 
 ## Exercise 5
 
 ```python
+# Write a function that prints some output on the screen and make sure you
+# can run it in the programming environment that you are using
+
 # YOUR SOLUTION HERE
+def func():
+    print("Hello, World.")
+    
+func()
 ```
 
 ## Exercise 6
 
 ```python
+# Now write one that makes some random arrays and prints out their sums,
+# the mean value, etc.
+
 # YOUR SOLUTION HERE
+def random_matrix(size=4):
+    matrix = np.random.rand(size)
+    
+    matrix.sum()
+    print("Sum: " + str(matrix.sum()))
+    print("Mean: " + str(matrix.mean()))
+    
+random_matrix()
 ```
 
 ## Exercise 7
 
 ```python
+# Write a function that consists of a set of loops that run through an array
+# and count the number of ones in it. Do the same thing using the where() function
+# (use info(where) to find out how to use it).
+
 # YOUR SOLUTION HERE
+
+# check .shape element
+# for i in zip(*inxs):
+#     print(i)
+def count_ones(array):
+    count = 0
+    for i in range(array.shape[0]):
+        for j in range(array.shape[1]):
+            if array[i][j] == 1:
+                count += 1
+    where_temp = len(np.where(b == 1)[0])
+
+    return count
+
+print((count_ones(a),len(np.where(a == 1)[0])))
+print((count_ones(b),len(np.where(b == 1)[0])))
+
 ```
 
 ## Excercises 8-???
@@ -97,6 +169,11 @@ Repeat exercise A.1 from Marsland, but create a Pandas DataFrame instead of a Nu
 
 ```python
 # YOUR SOLUTION HERE
+import pandas as pd
+
+a =  np.ones((6,4)) * 2
+df_a = pd.DataFrame(a)
+df_a
 ```
 
 ## Exercise 9
@@ -104,20 +181,54 @@ Repeat exercise A.2 using a DataFrame instead.
 
 ```python
 # YOUR SOLUTION HERE
+# can use iloc here
+b =  np.ones((6,4))
+np.fill_diagonal(b, 3)
+df_b = pd.DataFrame(b)
+df_b
 ```
 
 ## Exercise 10
 Repeat exercise A.3 using DataFrames instead.
 
 ```python
+# Can you multiply these two matrices together? Why does a * b work, but
+# not dot(a,b)?
+
 # YOUR SOLUTION HERE
+df_a * df_b
+
+try:
+    np.dot(df_a, df_b)
+except:
+    print("doesn't work")
+# dot product doesn't work because it is matrix multiplication,
+# and it requires num_col_a == num_row_b
 ```
 
 ## Exercise 11
 Repeat exercise A.7 using a dataframe.
 
 ```python
+# Write a function that consists of a set of loops that run through an array
+# and count the number of ones in it. Do the same thing using the where() function
+# (use info(where) to find out how to use it).
+
 # YOUR SOLUTION HERE
+#use iloc instead of ==
+
+def count_ones_df(df):
+    count = 0
+    for i in range(df.shape[0]):
+        for j in range(df.shape[1]):
+            if df.iloc[i][j] == 1:
+                count += 1
+    where_temp = len(np.where(b == 1)[0])
+
+    return count
+
+print((count_ones_df(df_a),len(np.where(df_a == 1)[0])))
+print((count_ones_df(df_b),len(np.where(df_b == 1)[0])))
 ```
 
 ## Exercises 12-14
@@ -138,6 +249,7 @@ How do you select the ``name`` column without using .iloc?
 
 ```python
 ## YOUR SOLUTION HERE
+titanic_df["name"]
 ```
 
 ## Exercise 13
@@ -146,6 +258,12 @@ After setting the index to ``sex``, how do you select all passengers that are ``
 ```python
 ## YOUR SOLUTION HERE
 titanic_df.set_index('sex',inplace=True)
+
+only_females = titanic_df.loc["female"]
+titanic_df.reset_index(inplace=True)
+
+print("Number of female passengers: " + str(len(only_females)))
+only_females
 ```
 
 ## Exercise 14
@@ -153,8 +271,5 @@ How do you reset the index?
 
 ```python
 ## YOUR SOLUTION HERE
-```
-
-```python
-
+titanic_df.reset_index(inplace=True)
 ```
